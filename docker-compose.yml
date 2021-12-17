@@ -1,7 +1,7 @@
-version: "1.0"
+version: "3.7"
 services:
     # image project
-    ingressozapp:
+    laravel:
         build: 
             args: 
                 user: roscoe
@@ -17,19 +17,19 @@ services:
             - redis
             - queue
         networks: 
-            - cursos
+            - laravelx
     
     # nginx
     nginx:
         image: nginx:alpine
         restart: unless-stopped
         ports: 
-            - 8989:80
+            - 80:80
         volumes: 
             - ./:/var/www
             - ./docker/nginx/:/etc/nginx/conf.d/
         networks: 
-            - cursos
+            - laravelx
 
     # db mysql
     mysql:
@@ -42,10 +42,8 @@ services:
             MYSQL_USER: ${DB_USERNAME}
         volumes: 
             - ./.docker/mysql/dbdata:/var/lib/mysql
-        ports: 
-            - 3388:3306
         networks: 
-            - cursos
+            - laravelx
 
     # queue
     queue:
@@ -62,14 +60,14 @@ services:
         depends_on: 
             - redis
         networks: 
-            - cursos
+            - laravelx
 
     # redis
     redis:
         image: redis:latest
         networks: 
-            - cursos
+            - laravelx
 
 networks: 
-    cursos:
+    laravelx:
         driver: bridge
